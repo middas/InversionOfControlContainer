@@ -38,6 +38,8 @@ namespace InversionOfControlContainer
         /// <param name="lifeStyle">The desired life style</param>
         /// <exception cref="InvalidOperationException">Exception for duplicate registrants</exception>
         public void Register<I, T>(LifeStyleType lifeStyle)
+            where I : class
+            where T : I
         {
             Type baseType = typeof(I);
             Type classType = typeof(T);

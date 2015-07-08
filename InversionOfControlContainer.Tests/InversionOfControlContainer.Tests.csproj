@@ -41,7 +41,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\InversionOfControlContainer\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="nunit.util">
       <HintPath>..\InversionOfControlContainer\packages\NUnitTestAdapter.2.0.0\lib\nunit.util.dll</HintPath>

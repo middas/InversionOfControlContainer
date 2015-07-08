@@ -136,5 +136,16 @@ namespace InversionOfControlContainer.Tests
                 Assert.IsNull(user.Repository);
             }
         }
+
+        [Test]
+        public void RegisterDuplicateType()
+        {
+            using (IoCContainer container = new IoCContainer())
+            {
+                container.Register<IRepository, Repository>();
+
+                Assert.Throws(typeof(InvalidOperationException), () => container.Register<IRepository, Repository>());
+            }
+        }
     }
 }

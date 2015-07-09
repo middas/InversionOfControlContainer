@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InversionOfControlContainer.LifeCycle
+namespace InversionOfControlContainer.LifeCycles
 {
     public class TransientLifeCycle : ILifeCycle
     {

@@ -1,4 +1,4 @@
-﻿using InversionOfControlContainer.LifeCycle;
+﻿using InversionOfControlContainer.LifeCycles;
 using System;
 using System.Collections.Generic;
 using System.Linq;

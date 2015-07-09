@@ -1,4 +1,4 @@
-﻿using InversionOfControlContainer.LifeCycle;
+﻿using InversionOfControlContainer.LifeCycles;
 using InversionOfControlContainer.Tests.TestingClasses;
 using NUnit.Framework;
 using System;

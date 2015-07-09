@@ -40,6 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IoCContainer.cs" />
+    <Compile Include="LifeCycle\ILifeCycle.cs" />
+    <Compile Include="LifeCycle\SingletonLifeCycle.cs" />
+    <Compile Include="LifeCycle\TransientLifeCycle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TypeNotRegisteredException.cs" />
   </ItemGroup>

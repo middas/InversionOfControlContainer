@@ -1,21 +1,25 @@
-﻿using System;
+﻿using InversionOfControlContainer.LifeCycle;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace InversionOfControlContainer
 {
-    public enum LifeStyleType { Transient, Singleton }
-
     /// <summary>
     /// An Inversion of Control container class that allows you to register types
     /// </summary>
     public class IoCContainer : IDisposable
     {
-        private Dictionary<Type, object> SingletonRegisteredTypes = new Dictionary<Type, object>();
-        private Dictionary<Type, Type> TransientRegisteredTypes = new Dictionary<Type, Type>();
+        private Dictionary<Type, ILifeCycle> Registrants = new Dictionary<Type, ILifeCycle>();
+
+        /// <summary>
+        /// Disposes this object
+        /// </summary>
+        public void Dispose()
+        {
+            Registrants = null;
+        }
 
         /// <summary>
         /// Registers a given type with a transient life style
@@ -23,11 +27,11 @@ namespace InversionOfControlContainer
         /// <typeparam name="I">The type being registered</typeparam>
         /// <typeparam name="T">The implementation of type I</typeparam>
         /// <exception cref="InvalidOperationException">Exception for duplicate registrants</exception>
-        public void Register<I, T>() 
+        public void Register<I, T>()
             where I : class
             where T : I
         {
-            Register<I, T>(LifeStyleType.Transient);
+            Register<I, T>(new TransientLifeCycle());
         }
 
         /// <summary>
@@ -35,29 +39,31 @@ namespace InversionOfControlContainer
         /// </summary>
         /// <typeparam name="I">The type being registered</typeparam>
         /// <typeparam name="T">The implementation of type I</typeparam>
-        /// <param name="lifeStyle">The desired life style</param>
+        /// <param name="lifeCycle">The desired <see cref="ILifeCycle"/> handler</param>
         /// <exception cref="InvalidOperationException">Exception for duplicate registrants</exception>
-        public void Register<I, T>(LifeStyleType lifeStyle)
+        public void Register<I, T>(ILifeCycle lifeCycle)
             where I : class
             where T : I
         {
             Type baseType = typeof(I);
             Type classType = typeof(T);
-            
+
             // check if the type has already been registered
-            if (SingletonRegisteredTypes.ContainsKey(baseType) || TransientRegisteredTypes.ContainsKey(baseType))
+            if (Registrants.ContainsKey(baseType))
             {
                 throw new InvalidOperationException(string.Format("'{0}' has already been registered.", baseType.Name));
             }
 
-            if (lifeStyle == LifeStyleType.Singleton)
+            lifeCycle.ItemType = classType;
+
+            // TODO: create a buildup factory
+            if (lifeCycle.BuildUp == null)
             {
-                SingletonRegisteredTypes.Add(baseType, CreateInstance(classType));
+                // use the default buildup
+                lifeCycle.BuildUp = CreateInstance;
             }
-            else
-            {
-                TransientRegisteredTypes.Add(baseType, classType);
-            }
+
+            Registrants.Add(baseType, lifeCycle);
         }
 
         /// <summary>
@@ -84,22 +90,12 @@ namespace InversionOfControlContainer
         /// <exception cref="InvalidOperationException">Exception for when the constructor can not be called</exception>
         public object Resolve(Type type)
         {
-            object value = null;
-
-            if (SingletonRegisteredTypes.ContainsKey(type))
-            {
-                value = SingletonRegisteredTypes[type];
-            }
-            else if (TransientRegisteredTypes.ContainsKey(type))
-            {
-                value = CreateInstance(TransientRegisteredTypes[type]);
-            }
-            else
+            if (!Registrants.ContainsKey(type))
             {
                 throw new TypeNotRegisteredException(type);
             }
 
-            return value;
+            return Registrants[type].Value;
         }
 
         /// <summary>
@@ -168,15 +164,6 @@ namespace InversionOfControlContainer
             }
 
             return value;
-        }
-
-        /// <summary>
-        /// Disposes this object
-        /// </summary>
-        public void Dispose()
-        {
-            SingletonRegisteredTypes = null;
-            TransientRegisteredTypes = null;
         }
     }
 }

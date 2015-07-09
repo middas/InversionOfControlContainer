@@ -1,4 +1,5 @@
-﻿using InversionOfControlContainer.Tests.TestingClasses;
+﻿using InversionOfControlContainer.LifeCycle;
+using InversionOfControlContainer.Tests.TestingClasses;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -56,7 +57,7 @@ namespace InversionOfControlContainer.Tests
         {
             using (IoCContainer container = new IoCContainer())
             {
-                container.Register<IRepository, Repository>(LifeStyleType.Singleton);
+                container.Register<IRepository, Repository>(new SingletonLifeCycle());
 
                 DateTime created = container.Resolve<IRepository>().CreationTime;
 
@@ -72,7 +73,7 @@ namespace InversionOfControlContainer.Tests
         {
             using (IoCContainer container = new IoCContainer())
             {
-                container.Register<IRepository, Repository>(LifeStyleType.Transient);
+                container.Register<IRepository, Repository>(new TransientLifeCycle());
 
                 DateTime created = container.Resolve<IRepository>().CreationTime;
 

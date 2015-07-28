@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InversionOfControlContainer.BuildUp;
+using System;
 
 namespace InversionOfControlContainer.LifeCycles
 {
@@ -10,7 +11,7 @@ namespace InversionOfControlContainer.LifeCycles
         /// <summary>
         /// How to build up the item
         /// </summary>
-        public Func<Type, object> BuildUp { get; set; }
+        public IBuildUp BuildUp { get; set; }
 
         /// <summary>
         /// The type of item
@@ -22,7 +23,7 @@ namespace InversionOfControlContainer.LifeCycles
         /// </summary>
         public object Value
         {
-            get { return BuildUp(ItemType); }
+            get { return BuildUp.Build(ItemType); }
         }
     }
 }

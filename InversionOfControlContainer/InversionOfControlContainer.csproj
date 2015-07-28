@@ -39,6 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuildUp\DependencyInjectionBuildUp.cs" />
+    <Compile Include="BuildUp\IBuildUp.cs" />
     <Compile Include="IoCContainer.cs" />
     <Compile Include="LifeCycles\ILifeCycle.cs" />
     <Compile Include="LifeCycles\SingletonLifeCycle.cs" />
